@@ -23,6 +23,7 @@
 
 linkchk() {
     for element in $1/*; do
+	# compound comparison: -a 'logical and'
 	[ -h "$element" -a ! -e "$element" ] && echo \"$element\"
 	[ -d "$element" ] && linkchk $element
     done
