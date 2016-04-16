@@ -1,1 +1,153 @@
 #!/bin/bash
+
+# Erratic behavior of the "$*" and "$@" internal Bash variables,
+#+ depending on whether they are quoted or not.
+# Inconsistent handling of word splitting and linefeeds.
+
+# Setting the script arguments, $1, $2, etc.
+set -- "First one" "second" "third:one" "" "Fifth: :one"
+
+echo
+
+echo 'IFS unchanged, using "$*"'
+c=0
+for i in "$*"
+do
+    echo "$((c+=1)) : [$i]"
+done
+echo ---
+
+echo 'IFS unchanged, using $*'
+c=0
+for i in $*
+do
+    echo "$((c+=1)) : [$i]"
+done
+echo ---
+
+echo 'IFS unchanged, using "$@"'
+c=0
+for i in "$@"
+do
+    echo "$((c+=1)) : [$i]"
+done
+echo ---
+
+echo 'IFS unchanged, using $@'
+c=0
+for i in $@
+do
+    echo "$((c+=1)) : [$i]"
+done
+echo ---
+
+
+IFS=:
+
+echo 'IFS=":", using "$*"'
+c=0
+for i in "$*"
+do
+    echo "$((c+=1)) : [$i]"
+done
+echo ---
+
+echo 'IFS=":", using $*'
+c=0
+for i in $*
+do
+    echo "$((c+=1)) : [$i]"
+done
+echo ---
+
+var=$*
+
+echo 'IFS=":", using "$var" (var=$*)'
+c=0
+for i in "$var"
+do
+    echo "$((c+=1)) : [$i]"
+done
+echo ---
+
+echo 'IFS=":", using $var (var=$*)'
+c=0
+for i in $var
+do
+    echo "$((c+=1)) : [$i]"
+done
+echo ---
+
+var="$*"
+
+echo 'IFS=":", using "$var" (var="$*")'
+c=0
+for i in "$var"
+do
+    echo "$((c+=1)) : [$i]"
+done
+echo ---
+
+echo 'IFS=":", using $var (var="$*")'
+c=0
+for i in $var
+do
+    echo "$((c+=1)) : [$i]"
+done
+echo ---
+
+echo 'IFS=":", using "$@"'
+c=0
+for i in "$@"
+do
+    echo "$((c+=1)) : [$i]"
+done
+echo ---
+
+echo 'IFS=":", using $@'
+c=0
+for i in $@
+do
+    echo "$((c+=1)) : [$i]"
+done
+echo ---
+
+var=$@
+
+echo 'IFS=":", using $var (var=$@)'
+c=0
+for i in $var
+do
+    echo "$((c+=1)) : [$i]"
+done
+echo ---
+
+echo 'IFS=":", using "$var" (var=$@)'
+c=0
+for i in "$var"
+do
+    echo "$((c+=1)) : [$i]"
+done
+echo ---
+
+var="$@"
+
+echo 'IFS=":", using $var (var="$@")'
+c=0
+for i in $var
+do
+    echo "$((c+=1)) : [$i]"
+done
+echo ---
+
+echo 'IFS=":", using "$var" (var="$@")'
+c=0
+for i in "$var"
+do
+    echo "$((c+=1)) : [$i]"
+done
+echo ---
+
+echo
+
+exit 0
