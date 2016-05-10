@@ -1,2 +1,4 @@
-# abs
-This repository includes some examples from the book named advanced bash-scripting guide.
+abs
+===
+
+This repository includes some examples in the book named *Advanced Bash Scripting Guide*.

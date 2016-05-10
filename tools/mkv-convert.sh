@@ -6,7 +6,9 @@
 
 COUNT=1
 
-for V in `ls -1 *.mp4`
+cpulimit -l 300 -e ffmpeg & # cpulimit required.
+
+for i in *.mp4
 do
     if [ "$COUNT" -lt 10 ]
     then
@@ -15,7 +17,7 @@ do
 	NAME=$COUNT
     fi
 
-    ffmpeg -i "$V" -filter:v scale=720:-1 -c:a copy $NAME.mkv && (( COUNT++ ))
+    ffmpeg -i "$i" -filter:v scale=720:-1 -c:a copy $NAME.mkv && (( COUNT++ ))
 done
 
 exit 0
