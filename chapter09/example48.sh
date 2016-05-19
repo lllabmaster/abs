@@ -2,6 +2,8 @@
 
 # Random number between two specified values.
 
+# THE CODE STYLE IS TOO BAD.
+
 randomBetween()
 {
     #  Generates a positive or negative random number between $min and $max
@@ -63,6 +65,107 @@ randomBetween()
 
     #  If min is itself not evenly divisible by $divisibleBy,
     #+ then fix the min to be within range.
+    if [ $(( min / divisibleBy * divisibleBy )) -ne ${min} ]
+    then
+	if [ ${min} -lt 0 ]
+	then
+	    min=$(( min / divisibleBy * divisibleBy ))
+	else
+	    min=$(( (min / divisibleBy + 1) * divisibleBy ))
+	fi
+    fi
     
+    #  If max is itself not evenly divisible by $divisibleBy,
+    #+ then fix the max to be within range.
+    if [ $(( max / divisibleBy * divisibleBy )) -ne ${max} ]
+    then
+	if [ ${max} -lt 0 ]
+	then
+	    max=$(( (max / divisibleBy - 1) * divisibleBy ))
+	else
+	    max=$(( max / divisibleBy * divisibleBy ))
+	fi
+    fi
 
+    # Now, to do the real work.
+    spread=$(( max - min ))
+    if [ ${spread} -lt 0 ]
+    then
+	spread=$(( 0 - spread ))
+    fi
+
+    let "spread += divisibleBy"
+    randomBetweenAnswer=$(( (RANDOM % spread) / divisibleBy * divisibleBy + min ))
+    
+    return 0
 }
+
+# Let's test the function.
+min=-14
+max=20
+divisibleBy=3
+
+#  Generate an array of expected answers and check to make sure we get
+#+ at least one of each answer if we loop long enough.
+declare -a answer
+minimum=${min}
+maximum=${max}
+
+if [ $(( minimum / divisibleBy * divisibleBy )) -ne ${minimum} ]
+then
+    if [ ${minimum} -lt 0 ]
+    then
+	minimum=$(( minimum / divisibleBy * divisibleBy ))
+    else
+	minimum=$(( (minimum / divisibleBy + 1) * divisibleBy ))
+    fi
+fi
+
+if [ $(( maximum / divisibleBy * divisibleBy )) -ne ${maximum} ]
+then
+    if [ ${maximum} -lt 0 ]
+    then
+	maximum=$(( (maximum / divisibleBy - 1) * divisibleBy ))
+    else
+	maximum=$(( maximum / divisibleBy * divisibleBy ))
+    fi
+fi
+
+disp=$(( 0 - minimum ))
+for ((i = ${minimum}; i <= ${maximum}; i += divisibleBy))
+do
+    answer[i+disp]=0
+done
+
+loopIt=1000
+for ((i = 0; i < ${loopIt}; i++))
+do
+    randomBetween ${max} ${min} ${divisibleBy}
+
+    # Report an error if unexpected.
+    if [ ${randomBetweenAnswer} -lt ${min} -o ${randomBetweenAnswer} -gt ${max} ]
+    then
+	echo "MIN or MAX error - ${randomBetweenAnswer}!"
+    fi
+
+    if [ $(( randomBetweenAnswer % ${divisibleBy} )) -ne 0 ]
+    then
+	echo "DIVISIBLE BY error - ${randomBetweenAnswer}!"
+    fi
+
+    # Store the answer away statistically.
+    answer[randomBetweenAnswer+disp]=$(( answer[randomBetweenAnswer+disp] + 1 ))
+done
+
+# Let's check the results.
+for ((i = ${minimum}; i <= ${maximum}; i += divisibleBy))
+do
+    if [ ${answer[i+disp]} -eq 0 ]
+    then
+	echo "We never got an answer of $i."
+    else
+	echo "${i} occurred ${answer[i+disp]} times."
+    fi
+done
+
+exit 0
