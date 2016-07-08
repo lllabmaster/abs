@@ -1,0 +1,28 @@
+variable1=22
+variable2=474
+variable3=5
+variable4=97
+
+message1="Hello, how are you?"
+message2="Enough for now. Goodbye."
+
+print_message()
+{
+    if [ -z "$1" ]
+    then
+	return 1
+    fi
+
+    echo
+
+    until [ -z "$1" ]
+    do
+	echo -n "$1"
+	echo -n " "
+	shift
+    done
+
+    echo
+
+    return 0
+}
