@@ -6,7 +6,7 @@ E_DIR_NOMATCH=70
 E_BAD_DBFILE=71
 
 # Filename for storing records (database file).
-dbfile=File_record.md5
+dbfile=file_record.md5
 
 set_up_database()
 {
