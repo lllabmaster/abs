@@ -5,7 +5,7 @@
 
 COUNT=1
 
-for i in $(seq 100)
+for i in $(seq 254)
 do
     ping -c $COUNT "219.223.169.$i" > /dev/null
 
