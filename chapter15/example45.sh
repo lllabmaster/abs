@@ -6,8 +6,6 @@ echo
 echo "Given the principal, interest rate, and term of a mortgage,"
 echo "calculate the monthly payment."
 
-bottom=1.0
-
 echo
 echo -n "Enter principal (no commas) "
 read principal
@@ -23,6 +21,8 @@ top=$(echo "scale=9; $principal * $interest_rate ^ $term" | bc)
 echo; echo "Please be patient. This may take a while."
 
 let "months = $term - 1"
+
+bottom=1.0
 
 for ((x=$months; x > 0; x--))
 do
